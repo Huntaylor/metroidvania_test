@@ -1,3 +1,71 @@
-[gd_scene format=3 uid="uid://bytyc4uucv1ji"]
+[gd_scene load_steps=11 format=3 uid="uid://bytyc4uucv1ji"]
 
-[node name="Player" type="Node2D"]
+[ext_resource type="Texture2D" uid="uid://3km3f8mbfjbs" path="res://assets/placeholders/Warrior/SpriteSheet/Warrior_Sheet-Effect.png" id="1_jkxm8"]
+[ext_resource type="Script" path="res://components/player/player.gd" id="1_qlyqn"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_crenw"]
+atlas = ExtResource("1_jkxm8")
+region = Rect2(0, 0, 69, 44)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_plk2r"]
+atlas = ExtResource("1_jkxm8")
+region = Rect2(69, 0, 69, 44)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ns07g"]
+atlas = ExtResource("1_jkxm8")
+region = Rect2(138, 0, 69, 44)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i2pf0"]
+atlas = ExtResource("1_jkxm8")
+region = Rect2(207, 0, 69, 44)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_18kos"]
+atlas = ExtResource("1_jkxm8")
+region = Rect2(276, 0, 69, 44)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_etwms"]
+atlas = ExtResource("1_jkxm8")
+region = Rect2(345, 0, 69, 44)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_fu6wr"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_crenw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_plk2r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ns07g")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i2pf0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_18kos")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_etwms")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iltau"]
+size = Vector2(20, 33)
+
+[node name="CharacterBody2D" type="CharacterBody2D"]
+position = Vector2(18, -21)
+script = ExtResource("1_qlyqn")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_fu6wr")
+autoplay = "default"
+frame_progress = 0.133339
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-8, 4.5)
+shape = SubResource("RectangleShape2D_iltau")
