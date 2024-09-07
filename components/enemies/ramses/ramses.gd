@@ -30,7 +30,6 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_ready() -> void:
-	Engine.time_scale = .5
 	animated_sprite_2d.play('walk')
 	
 	pass # Replace with function body.
