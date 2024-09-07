@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://d26mf2518sd41"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mqspu"]
+size = Vector2(25, 17)
+
+[node name="BaseEnemies" type="CollisionShape2D"]
+shape = SubResource("RectangleShape2D_mqspu")
