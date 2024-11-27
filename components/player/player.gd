@@ -1,24 +1,52 @@
 class_name Player extends CharacterBody2D
 
-@onready var animated_sprite_2d: AnimatedSprite2D = $Marker2D/AnimatedSprite2D
+@onready var animated_sprite: AnimatedSprite2D = $Marker2D/AnimatedSprite2D
 @onready var marker_2d: Marker2D = $Marker2D
 
 @export var falling_offset := 0.0
-const SPEED = 300.0
-const JUMP_VELOCITY = -400.0
+const speed = 300.0
+const jump_vel = -400.0
 var fall_height := 0.0
 
-var main_sm = LimboHSM
+var main_sm = LimboHSM.new()
+
+var dir
 
 func _ready() -> void:
 	initiate_state_machine()
 
 
+func _physics_process(delta: float) -> void:
+	dir = Input.get_axis("move_left", "move_right")
+	if dir:
+		velocity.x = dir * speed
+	else:
+		velocity.x = move_toward(velocity.x, 0, speed)
+	if not is_on_floor():
+		velocity += get_gravity() * delta
+		
+	flip_sprite()
+		
+		
+	move_and_slide()
+
+func flip_sprite() -> void:
+	if dir == 1:
+		marker_2d.scale.x = 1
+	elif dir == -1:
+		marker_2d.scale.x = -1
+		
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("jump"):
+		main_sm.dispatch(&"to_jump")
+	elif event.is_action_pressed("attack"):
+		main_sm.dispatch(&"to_attack")
+		
+
 func initiate_state_machine():
-	main_sm = LimboHSM.new()
 	add_child(main_sm)
 	
-	var idle_state = LimboState.new().named("idle").call_on_enter(idle_start).call_on_exit(idle_update)
+	var idle_state = LimboState.new().named("idle").call_on_enter(idle_start).call_on_update(idle_update)
 	var run_state = LimboState.new().named("run").call_on_enter(run_start).call_on_update(run_update)
 	var jump_state = LimboState.new().named("jump").call_on_enter(jump_start).call_on_update(jump_update)
 	var attack_state = LimboState.new().named("attack").call_on_enter(attack_start).call_on_update(attack_update)
@@ -32,38 +60,69 @@ func initiate_state_machine():
 	
 	main_sm.initial_state = idle_state
 	
+	main_sm.add_transition(idle_state, run_state, &"to_run")
+	main_sm.add_transition(idle_state, jump_state, &"to_jump")
+	main_sm.add_transition(run_state, jump_state, &"to_jump")
+	main_sm.add_transition(main_sm.ANYSTATE, fall_state, &"to_fall")
+	main_sm.add_transition(main_sm.ANYSTATE, attack_state, &"to_attack")
+	main_sm.add_transition(main_sm.ANYSTATE, idle_state, &"state_ended")
+	
 	main_sm.initialize(self)
 	main_sm.set_active(true)
 
 func idle_start():
-	pass
+	animated_sprite.play('Idle')
 
 func idle_update(delta: float):
-	pass
+	fall_height = global_position.y + falling_offset
+	if velocity.x != 0 :
+		main_sm.dispatch(&"to_run")
+	if global_position.y > fall_height:
+		main_sm.dispatch(&"to_fall")
 
 func run_start():
-	pass
+	animated_sprite.play('Run')
 
 func run_update(delta: float):
-	pass
+	if velocity.x == 0 :
+		main_sm.dispatch(&"state_ended")
+	if global_position.y > fall_height:
+		main_sm.dispatch(&"to_fall")
 
 func jump_start():
-	pass
+	animated_sprite.play("Jump")
+	velocity.y = jump_vel
+	
 
 func jump_update(delta: float):
-	pass
+	print
+	if velocity.y > 0 or global_position.y > fall_height:
+		print('to fall')
+		main_sm.dispatch(&"to_fall")
+	if is_on_floor():
+		main_sm.dispatch(&"state_ended")
+	if Input.is_action_just_released("jump") and velocity.y < 0:
+		velocity.y = jump_vel / 4
+		main_sm.dispatch(&"to_fall")
 
 func attack_start():
-	pass
+	animated_sprite.play("Attack")
 
 func attack_update(delta: float):
-	pass
+	if !animated_sprite.is_playing():
+		if velocity.y == 0:
+			main_sm.dispatch(&"state_ended")
+		else :
+			main_sm.dispatch(&"to_fall")
 
 func fall_start():
-	pass
+	animated_sprite.play("Fall")
 
 func fall_update(delta: float):
-	pass
+	print("at fall")
+	
+	if is_on_floor():
+		main_sm.dispatch(&"state_ended")
 
 
 
