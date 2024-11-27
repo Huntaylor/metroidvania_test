@@ -315,12 +315,6 @@ animations = [{
 position = Vector2(18, -21)
 script = ExtResource("1_qlyqn")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-texture_filter = 1
-sprite_frames = SubResource("SpriteFrames_fu6wr")
-autoplay = "default"
-frame_progress = 0.698114
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-8, 4.5)
 shape = SubResource("RectangleShape2D_iltau")

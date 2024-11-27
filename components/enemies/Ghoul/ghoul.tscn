@@ -1,0 +1,63 @@
+[gd_scene load_steps=8 format=3 uid="uid://dgikf2x1b2f3e"]
+
+[ext_resource type="Texture2D" uid="uid://bvml0tbglctxq" path="res://assets/placeholders/Warrior/SpriteSheet/02 ghoul/ghoul_56x80px.png" id="1_cears"]
+[ext_resource type="Script" path="res://components/enemies/Ghoul/ghoul.gd" id="1_m88us"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ojfyv"]
+size = Vector2(30, 45)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7ll88"]
+atlas = ExtResource("1_cears")
+region = Rect2(280, 85, 56, 85)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hmof5"]
+atlas = ExtResource("1_cears")
+region = Rect2(336, 85, 56, 85)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4iqso"]
+atlas = ExtResource("1_cears")
+region = Rect2(392, 85, 56, 85)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_c4ma5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7ll88")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hmof5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4iqso")
+}],
+"loop": true,
+"name": &"Walk",
+"speed": 10.0
+}]
+
+[node name="Ghoul" type="CharacterBody2D"]
+script = ExtResource("1_m88us")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-2, 12.5)
+shape = SubResource("RectangleShape2D_ojfyv")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+position = Vector2(-1, 6)
+sprite_frames = SubResource("SpriteFrames_c4ma5")
+animation = &"Walk"
+autoplay = "Walk"
+frame_progress = 0.89349
+
+[node name="ForwardView" type="RayCast2D" parent="."]
+position = Vector2(0, 13)
+target_position = Vector2(19, 0)
+
+[node name="BackView" type="RayCast2D" parent="."]
+position = Vector2(0, 13)
+target_position = Vector2(-23, 0)
+
+[node name="GroundControl" type="RayCast2D" parent="."]
+position = Vector2(19, 29)
+target_position = Vector2(0, 18)
