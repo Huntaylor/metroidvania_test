@@ -8,6 +8,66 @@ const SPEED = 300.0
 const JUMP_VELOCITY = -400.0
 var fall_height := 0.0
 
+var main_sm = LimboHSM
+
+func _ready() -> void:
+	initiate_state_machine()
+
+
+func initiate_state_machine():
+	main_sm = LimboHSM.new()
+	add_child(main_sm)
+	
+	var idle_state = LimboState.new().named("idle").call_on_enter(idle_start).call_on_exit(idle_update)
+	var run_state = LimboState.new().named("run").call_on_enter(run_start).call_on_update(run_update)
+	var jump_state = LimboState.new().named("jump").call_on_enter(jump_start).call_on_update(jump_update)
+	var attack_state = LimboState.new().named("attack").call_on_enter(attack_start).call_on_update(attack_update)
+	var fall_state = LimboState.new().named("fall").call_on_enter(fall_start).call_on_update(fall_update)
+	
+	main_sm.add_child(idle_state)
+	main_sm.add_child(run_state)
+	main_sm.add_child(jump_state)
+	main_sm.add_child(attack_state)
+	main_sm.add_child(fall_state)
+	
+	main_sm.initial_state = idle_state
+	
+	main_sm.initialize(self)
+	main_sm.set_active(true)
+
+func idle_start():
+	pass
+
+func idle_update(delta: float):
+	pass
+
+func run_start():
+	pass
+
+func run_update(delta: float):
+	pass
+
+func jump_start():
+	pass
+
+func jump_update(delta: float):
+	pass
+
+func attack_start():
+	pass
+
+func attack_update(delta: float):
+	pass
+
+func fall_start():
+	pass
+
+func fall_update(delta: float):
+	pass
+
+
+
+
 
 
 #const playerState = {Idle = 'Idle', Run = 'Run', Jump = 'Jump', Attack = 'Attack', Damage = 'Damage', Fall = 'Fall'}
